@@ -1,20 +1,16 @@
 import {
-    CREATE_EMAIL, CREATE_EMAILS_FROM_ARRAY, DELETE_EMAIL,
+    CREATE_EMAIL, CREATE_EMAILS_FROM_ARRAY, DELETE_EMAIL, UPDATE_INPUT,
 } from './action';
 import { compose } from './util';
 
 // Email model is designed according to RFC 2822
 // https://tools.ietf.org/html/rfc2822#section-3.4
-export const Email = {
-    localPart: '',
-    domain: '',
-};
-
 export function createEmail(emailString) {
     const id = emailString;
     const [ localPart, domain ] = emailString.split('@');
     return {
         id,
+        string: emailString,
         localPart,
         domain,
     };
@@ -34,9 +30,22 @@ export const initialState = {
 // selectors
 export const validEmailsList = (state) => state.emailIds.filter(isValid);
 
-export const addEmail = (emailString) => (state) => {
+export const hasEmail = (string) => (state) => {
+    const { emailById } = state;
+    return Object.values(emailById).reduce(
+        (acc, emailObj) => acc || emailObj.string === string,
+        false,
+    );
+};
+
+export const addEmail = (string) => (state) => {
+    const emailString = string.trim();
+    if (!emailString || hasEmail(emailString)(state)) {
+        return { ...state, inputValue: '' };
+    }
     const newEmail = createEmail(emailString);
     return {
+        inputValue: '',
         emailIds: state.emailIds.concat(newEmail.id),
         emailById: {
             [newEmail.id]: newEmail,
@@ -69,6 +78,7 @@ export const addEmailsFromArray = (emailsArray) => (state) => {
 export const emailReducer = (getState) => (message) => {
     const state = getState();
     switch (message.type) {
+        case UPDATE_INPUT: return { ...state, inputValue: message.payload };
         case CREATE_EMAIL: return addEmail(message.payload)(state);
         case CREATE_EMAILS_FROM_ARRAY: return addEmailsFromArray(message.payload)(state);
         case DELETE_EMAIL: return removeEmail(message.payload)(state);

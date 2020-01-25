@@ -1,6 +1,8 @@
 import { getItem } from './view';
 import { emailReducer, validEmailsList } from './model';
-import { CREATE_EMAIL, CREATE_EMAILS_FROM_ARRAY, DELETE_EMAIL } from './action';
+import {
+    CREATE_EMAIL, CREATE_EMAILS_FROM_ARRAY, DELETE_EMAIL, UPDATE_INPUT,
+} from './action';
 import { compose, getRandomString, findParentDataKey } from './util';
 
 export const handleRender = (parentElement, { getState }) => (shouldUpdate) => {
@@ -15,10 +17,23 @@ export const handleRender = (parentElement, { getState }) => (shouldUpdate) => {
         return;
     }
     emailListContainer.innerHTML = state.emailIds.map(getItem).join('');
-    emailInput.value = '';
+    emailInput.value = state.inputValue;
 };
 
 export const handleInputEmail = ({ maybeRender, setState }, { getState }) => compose(
+    maybeRender,
+    setState,
+    emailReducer(getState),
+    (event) => {
+        const { value } = event.target;
+        if (value.endsWith(',') || value.endsWith(' ')) {
+            return { type: CREATE_EMAIL, payload: event.target.value.slice(0, -1) };
+        }
+        return { type: UPDATE_INPUT, payload: value };
+    },
+);
+
+export const handleChangeEmail = ({ maybeRender, setState }, { getState }) => compose(
     maybeRender,
     setState,
     emailReducer(getState),
@@ -56,4 +71,16 @@ export const handleEmailsSet = ({ maybeRender, setState }, { getState }) => comp
     setState,
     emailReducer(getState),
     (emailsArray) => ({ type: CREATE_EMAILS_FROM_ARRAY, payload: emailsArray }),
+);
+
+export const handleEmailsPaste = ({ maybeRender, setState }, { getState }) => compose(
+    maybeRender,
+    setState,
+    emailReducer(getState),
+    // (event) => ({ type: CREATE_EMAILS_FROM_ARRAY, payload: event.clipboardData.getData('text').split(',') }),
+    (event) => {
+        const emailsText = event.clipboardData.getData('text');
+        event.preventDefault();
+        return { type: CREATE_EMAILS_FROM_ARRAY, payload: emailsText.split(',') };
+    },
 );

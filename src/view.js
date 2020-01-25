@@ -16,7 +16,7 @@ export const EmailEditor = `
         <div class="EmailEditor-Title">${copy().title()}</div>
         <div class="EmailEditor-Content">
             <div class="${actionClass.itemList}"></div>
-            <input class="${actionClass.inputElement}" type="email" placeholder="${copy().inputPlaceholder()}"></input>
+            <input class="${actionClass.inputElement}" type="text" placeholder="${copy().inputPlaceholder()}"></input>
         </div>
         <div class="EmailEditor-Actions">
             <button class="${actionClass.addButton}">${copy().addEmail()}</button>

@@ -1,8 +1,9 @@
 import { EmailEditor, actionClass } from './view';
 import { initialState } from './model';
 import {
-    handleRender, handleInputEmail, handleAddClick, handleCountClick,
-    handleEmailsGet, handleEmailsSet, handleItemDelete,
+    handleRender, handleChangeEmail, handleAddClick, handleCountClick,
+    handleEmailsGet, handleEmailsSet, handleItemDelete, handleInputEmail,
+    handleEmailsPaste,
 } from './controller';
 
 // observable stuff
@@ -49,7 +50,10 @@ export function addEmailEditor(parentElement) {
     const emailCountButton = emailEditorFragment.querySelector(`.${actionClass.countButton}`);
 
     // bind controllers to dom events
-    emailInputElement.onchange = handleInputEmail({ maybeRender, setState }, { getState });
+    emailInputElement.onchange = handleChangeEmail({ maybeRender, setState }, { getState });
+    emailInputElement.oninput = handleInputEmail({ maybeRender, setState }, { getState });
+    emailInputElement.onpaste = handleEmailsPaste({ maybeRender, setState }, { getState });
+
     emailAddButton.onclick = handleAddClick({ maybeRender, setState }, { getState });
     emailCountButton.onclick = handleCountClick({ getState });
     emailListElement.onclick = handleItemDelete({ maybeRender, setState }, { getState });
