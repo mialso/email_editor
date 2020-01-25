@@ -2,20 +2,8 @@ import { EmailEditor, actionClass } from './view';
 import { initialState } from './model';
 import {
     handleRender, handleInputEmail, handleAddClick, handleCountClick,
+    handleEmailsGet, handleEmailsSet, handleItemDelete,
 } from './controller';
-
-// state management
-let currentState = initialState;
-
-export const getState = () => currentState;
-export const setState = (nextState) => {
-    const hasChanges = currentState !== nextState;
-    if (hasChanges) {
-        currentState = Object.freeze(nextState);
-        listeners.forEach((listener) => window.setTimeout(() => listener && listener(currentState), 0));
-    }
-    return hasChanges;
-};
 
 // observable stuff
 const listeners = [];
@@ -33,6 +21,21 @@ export const subscribe = (listener) => {
     return unsubscribe(listener);
 };
 
+// state management
+let currentState = initialState;
+
+export const getState = () => currentState;
+export const setState = (nextState) => {
+    const hasChanges = currentState !== nextState;
+    if (hasChanges) {
+        currentState = Object.freeze(nextState);
+        listeners.forEach(
+            (listener) => window.setTimeout(() => listener && listener(currentState), 0),
+        );
+    }
+    return hasChanges;
+};
+
 export function addEmailEditor(parentElement) {
     const emailEditorFragment = document.createRange().createContextualFragment(EmailEditor);
 
@@ -41,6 +44,7 @@ export function addEmailEditor(parentElement) {
 
     // find dom elements to handle user interactions
     const emailInputElement = emailEditorFragment.querySelector(`.${actionClass.inputElement}`);
+    const emailListElement = emailEditorFragment.querySelector(`.${actionClass.itemList}`);
     const emailAddButton = emailEditorFragment.querySelector(`.${actionClass.addButton}`);
     const emailCountButton = emailEditorFragment.querySelector(`.${actionClass.countButton}`);
 
@@ -48,12 +52,15 @@ export function addEmailEditor(parentElement) {
     emailInputElement.onchange = handleInputEmail({ maybeRender, setState }, { getState });
     emailAddButton.onclick = handleAddClick({ maybeRender, setState }, { getState });
     emailCountButton.onclick = handleCountClick({ getState });
+    emailListElement.onclick = handleItemDelete({ maybeRender, setState }, { getState });
 
     // render the fragment to the dom via given parent element
     parentElement.appendChild(emailEditorFragment);
 
     return {
         subscribe,
+        getEmails: handleEmailsGet({ getState }),
+        setEmails: handleEmailsSet({ maybeRender, setState }, { getState }),
     };
 }
 

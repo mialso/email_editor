@@ -11,3 +11,13 @@ export function compose(...funcs) {
 export function getRandomString() {
     return Math.random().toString().substring(2);
 }
+
+export function findParentDataKey(event, key) {
+    let value = null;
+    let loopEl = event.target;
+    do {
+        value = loopEl.dataset[key];
+        loopEl = loopEl.parentNode;
+    } while (!value && event.currentTarget !== loopEl);
+    return value;
+}

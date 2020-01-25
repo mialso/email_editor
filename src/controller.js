@@ -1,7 +1,7 @@
 import { getItem } from './view';
-import { emailReducer, validEmailsCount } from './model';
-import { CREATE_EMAIL } from './action';
-import { compose, getRandomString } from './util';
+import { emailReducer, validEmailsList } from './model';
+import { CREATE_EMAIL, CREATE_EMAILS_FROM_ARRAY, DELETE_EMAIL } from './action';
+import { compose, getRandomString, findParentDataKey } from './util';
 
 export const handleRender = (parentElement, { getState }) => (shouldUpdate) => {
     if (!shouldUpdate) {
@@ -25,6 +25,19 @@ export const handleInputEmail = ({ maybeRender, setState }, { getState }) => com
     (event) => ({ type: CREATE_EMAIL, payload: event.target.value }),
 );
 
+export const handleItemDelete = ({ maybeRender, setState }, { getState }) => compose(
+    maybeRender,
+    setState,
+    emailReducer(getState),
+    (event) => ({ type: DELETE_EMAIL, payload: findParentDataKey(event, 'key') }),
+    /*
+    (event) => {
+        debugger;
+        return { type: DELETE_EMAIL, payload: findParentDataKey(event, 'key') };
+    },
+    */
+);
+
 export const handleAddClick = ({ maybeRender, setState }, { getState }) => compose(
     maybeRender,
     setState,
@@ -33,5 +46,14 @@ export const handleAddClick = ({ maybeRender, setState }, { getState }) => compo
 );
 
 export const handleCountClick = ({ getState }) => () => {
-    window.alert(`Valid Emails: ${validEmailsCount(getState())}`);
+    window.alert(`Valid Emails: ${validEmailsList(getState()).length}`);
 };
+
+export const handleEmailsGet = ({ getState }) => () => validEmailsList(getState());
+
+export const handleEmailsSet = ({ maybeRender, setState }, { getState }) => compose(
+    maybeRender,
+    setState,
+    emailReducer(getState),
+    (emailsArray) => ({ type: CREATE_EMAILS_FROM_ARRAY, payload: emailsArray }),
+);
