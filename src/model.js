@@ -28,10 +28,13 @@ export const initialState = {
     inputValue: '',
 };
 
+// selectors
+export const validEmailsCount = (state) => {
+    const validEmails = state.emailIds.filter(isValid);
+    return validEmails.length;
+};
+
 export function addEmail(state, emailString) {
-    if (!isValid(emailString)) {
-        return state;
-    }
     const newEmail = createEmail(emailString);
     return {
         emailIds: state.emailIds.concat(newEmail.id),

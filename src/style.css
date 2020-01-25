@@ -19,13 +19,20 @@
 
 .EmailEditor-Item {
     display: inline-flex;
-    background: rgba(102, 153, 255, 0.2);
-    border-radius: 100px;
     line-height: 24px;
     padding-left: 10px;
     padding-right: 24px;
 }
 
-.EmailEditor [class^="EmailEditor-Button"] {
+.EmailEditor-Item--valid {
+    background: rgba(102, 153, 255, 0.2);
+    border-radius: 100px;
+}
+
+.EmailEditor-Item--invalid {
+    border-bottom: 1px dashed #d14836;
+}
+
+.EmailEditor-Actions > [class^="EmailEditor-Button"] {
     background: blue;
 }

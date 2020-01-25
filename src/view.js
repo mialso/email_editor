@@ -1,19 +1,35 @@
+import { isValid } from './model';
+import { copy } from './text';
+
 import './style.css';
+
+export const actionClass = {
+    inputElement: 'EmailEditor-Input',
+    addButton: 'EmailEditor-Button--AddEmail',
+    countButton: 'EmailEditor-Button--GetCount',
+};
 
 export const EmailEditor = `
     <div class="EmailEditor">
-        <div class="EmailEditor-Title">Share Board name with others</div>
+        <div class="EmailEditor-Title">${copy().title()}</div>
         <div class="EmailEditor-Content">
             <div class="EmailEditor-List"></div>
-            <input class="EmailEditor-Input" type="email" placeholder="add more people..."></input>
+            <input class="${actionClass.inputElement}" type="email" placeholder="${copy().inputPlaceholder()}"></input>
         </div>
         <div class="EmailEditor-Actions">
-            <button class="EmailEditor-Button--AddEmail">Add email</button>
-            <button class="EmailEditor-Button--GetCount">Get emails count</button>
+            <button class="${actionClass.addButton}">${copy().addEmail()}</button>
+            <button class="${actionClass.countButton}">${copy().countEmails()}</button>
         </div>
     </div>
 `;
 
 export function getItem(id) {
-    return `<span class="EmailEditor-Item">${id}</span>`;
+    if (!isValid(id)) {
+        return `
+            <span class="EmailEditor-Item">
+                <span class=" EmailEditor-Item--invalid">${id}</span>
+            </span>
+        `;
+    }
+    return `<span class="EmailEditor-Item EmailEditor-Item--valid">${id}</span>`;
 }
