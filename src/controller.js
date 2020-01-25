@@ -10,6 +10,8 @@ export const handleRender = (parentElement, { getState }) => (shouldUpdate) => {
         return;
     }
     const state = getState();
+    // TODO
+    // const emailEditorContainer = parentElement.querySelector('.EmailEditor-Editor');
     const emailListContainer = parentElement.querySelector('.EmailEditor-List');
     const emailInput = parentElement.querySelector('.EmailEditor-Input');
     if (!(emailListContainer && emailInput)) {
@@ -18,6 +20,7 @@ export const handleRender = (parentElement, { getState }) => (shouldUpdate) => {
     }
     emailListContainer.innerHTML = state.emailIds.map(getItem).join('');
     emailInput.value = state.inputValue;
+    emailInput.scrollIntoView();
 };
 
 export const handleInputEmail = ({ maybeRender, setState }, { getState }) => compose(
@@ -45,12 +48,6 @@ export const handleItemDelete = ({ maybeRender, setState }, { getState }) => com
     setState,
     emailReducer(getState),
     (event) => ({ type: DELETE_EMAIL, payload: findParentDataKey(event, 'key') }),
-    /*
-    (event) => {
-        debugger;
-        return { type: DELETE_EMAIL, payload: findParentDataKey(event, 'key') };
-    },
-    */
 );
 
 export const handleAddClick = ({ maybeRender, setState }, { getState }) => compose(
@@ -77,7 +74,6 @@ export const handleEmailsPaste = ({ maybeRender, setState }, { getState }) => co
     maybeRender,
     setState,
     emailReducer(getState),
-    // (event) => ({ type: CREATE_EMAILS_FROM_ARRAY, payload: event.clipboardData.getData('text').split(',') }),
     (event) => {
         const emailsText = event.clipboardData.getData('text');
         event.preventDefault();

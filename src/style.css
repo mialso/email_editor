@@ -1,29 +1,67 @@
 .EmailEditor {
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
-    background: grey;
-    padding: 32px 50px 24px 50px;
+    font-family: Open Sans;
+    color: #050038;
+    border-radius: 8px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2)
 }
 
 .EmailEditor-Content {
+    background: #F8F8F7;
+    padding: 32px 50px 24px 50px;
+}
+
+.EmailEditor-Actions {
+    display: flex;
+    padding: 24px 50px 32px 50px;
+}
+
+.EmailEditor-Title {
+    font-size: 20px;
+    line-height: 27px;
+    margin-bottom: 24px;
+}
+
+.EmailEditor-Editor {
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 96px;
+    padding: 7px 4px 3px 6px;
+    overflow-x: hidden;
+    overflow-y: auto;
     background: white;
+    border: 1px solid #C3C2CF;
+    border-radius: 4px;
 }
 
 .EmailEditor-List {
+    display: inline-flex;
+    flex-wrap: wrap;
 }
 
 .EmailEditor-Input {
+    height: 24px;
+    margin-left: 4px;
+    margin-bottom: 3px;
     border: unset;
     outline: unset;
 }
 
+.EmailEditor-Input::placeholder {
+    color: #C3C2CF;
+}
+
 .EmailEditor-Item {
     display: inline-flex;
+    height: 24px;
     position: relative;
     font-size: 14px;
     line-height: 24px;
     padding-right: 24px;
-    margin-left: 4px;
+    margin-right: 4px;
+    margin-bottom: 3px;
 }
 
 .EmailEditor-Item--valid {
@@ -49,5 +87,16 @@
 }
 
 .EmailEditor-Actions > [class^="EmailEditor-Button"] {
-    background: blue;
+    height: 40px;
+    margin-right: 16px;
+    padding: 0 16px;
+    background: #4262FF;
+    border: none;
+    border-radius: 6px;
+    outline: none;
+    font-family: Open Sans;
+    font-size: 14px;
+    line-height: 24px;
+    color: white;
+    cursor: pointer;
 }
