@@ -7,3 +7,7 @@ export function compose(...funcs) {
     }
     return funcs.reduce((a, b) => (...args) => a(b(...args)));
 }
+
+export function getRandomString() {
+    return Math.random().toString().substring(2);
+}
