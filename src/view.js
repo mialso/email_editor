@@ -17,11 +17,14 @@ export const EmailEditor = `
             <div class="EmailEditor-Title">
                 ${copy().title().start}<b>${copy().title().name}</b>${copy().title().end}
             </div>
-            <div class="${actionClass.itemList}">
-                <input class="${actionClass.inputElement}" type="text" placeholder="${copy().inputPlaceholder()}"></input>
+            <div class="EmailEditor-Container">
+                <div class="${actionClass.itemList}">
+                    <input class="${actionClass.inputElement}" type="text" placeholder="${copy().inputPlaceholder()}"></input>
+                </div>
+                <div class="EmailEditor-Container--spacer"></div>
             </div>
         </div>
-        <div class="EmailEditor-Actions">
+        <div class="EmailEditor-Action">
             <button class="${actionClass.addButton}">${copy().addEmail()}</button>
             <button class="${actionClass.countButton}">${copy().countEmails()}</button>
         </div>
@@ -44,14 +47,14 @@ export function getItem(id) {
     if (!isValid(id)) {
         return `
             <span class="EmailEditor-Item" data-key="${id}">
-                <span class="EmailEditor-Item--invalid EmailEditor-TextWrap">${id}</span>
+                <span class="EmailEditor-Item--invalid EmailEditor-ItemEllipsis">${id}</span>
                 ${RemoveButton(id)}
             </span>
         `;
     }
     return `
         <span class="EmailEditor-Item EmailEditor-Item--valid" data-key="${id}">
-            <span class="EmailEditor-TextWrap">${id}</span>
+            <span class="EmailEditor-ItemEllipsis">${id}</span>
             ${RemoveButton(id)}
         </span>
     `;
