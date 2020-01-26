@@ -38,6 +38,7 @@ export const hasEmail = (string) => (state) => {
     );
 };
 
+// mutations
 export const addEmail = (string) => (state) => {
     const emailString = string.trim();
     if (!emailString || hasEmail(emailString)(state)) {
@@ -80,6 +81,7 @@ export const updateInput = (value) => (state) => ({
     inputValue: value,
 });
 
+// common interface aka redux-reducer
 export const emailReducer = (getState) => (message) => {
     const state = getState();
     switch (message.type) {

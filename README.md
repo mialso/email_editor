@@ -3,6 +3,8 @@
 > please visit a [codepen.io](https://codepen.io/mialso/project/full/XJNYbN) for a working example
 
 #### usage
+> `./dist/` folder has both **emailEditor.css**  **emailEditor.js** bundles
+
 ```
 const { addEmailEditor } = window.EmailEditor;
 const emailEditorContainer = document.getElementById('#email_editor');
