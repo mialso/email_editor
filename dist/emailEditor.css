@@ -1,32 +1,127 @@
 .EmailEditor {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
-    background: grey;
-    padding: 32px 50px 24px 50px;
+    max-height: inherit;
+    box-sizing: border-box;
+    font-family: 'Open Sans';
+    color: #050038;
+    border-radius: 8px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2)
 }
 
 .EmailEditor-Content {
-    background: white;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    flex: 1;
+    background: #F8F8F7;
+    padding: 32px 50px 24px 50px;
 }
 
-.EmailEditor-List {
+.EmailEditor-Title {
+    font-size: 20px;
+    line-height: 27px;
+    margin-bottom: 24px;
+}
+
+.EmailEditor-Container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    background: white;
+    border: 1px solid #C3C2CF;
+    border-radius: 4px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.EmailEditor-Container--spacer {
+    flex: 1;
+}
+
+.EmailEditor-Editor {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 7px 4px 3px 6px;
+    box-sizing: border-box;
 }
 
 .EmailEditor-Input {
+    height: 24px;
+    margin-left: 4px;
+    margin-bottom: 3px;
+    flex: 1;
+    line-height: 24px;
+    font-family: 'Open Sans';
+    font-size: 14px;
     border: unset;
     outline: unset;
+    padding: unset;
+}
+
+.EmailEditor-Input::placeholder {
+    color: #C3C2CF;
 }
 
 .EmailEditor-Item {
     display: inline-flex;
-    background: rgba(102, 153, 255, 0.2);
-    border-radius: 100px;
+    height: 24px;
+    position: relative;
+    font-size: 14px;
     line-height: 24px;
-    padding-left: 10px;
     padding-right: 24px;
+    margin-right: 4px;
+    margin-bottom: 3px;
+    overflow: hidden;
 }
 
-.EmailEditor [class^="EmailEditor-Button"] {
-    background: blue;
+.EmailEditor-Item--valid {
+    background: rgba(102, 153, 255, 0.2);
+    padding-left: 10px;
+    border-radius: 100px;
+}
+
+.EmailEditor-Item--invalid {
+    border-bottom: 1px dashed #d14836;
+}
+
+.EmailEditor-ItemEllipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.EmailEditor-ItemRemove {
+    position: absolute;
+    right: 0;
+    width: 24px;
+    height: 22px;
+    padding: unset;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background: transparent;
+}
+
+.EmailEditor-Action {
+    display: flex;
+    padding: 24px 50px 32px 50px;
+}
+
+.EmailEditor-Action > [class^="EmailEditor-Button"] {
+    height: 40px;
+    margin-right: 16px;
+    padding: 0 16px;
+    background: #4262FF;
+    border: none;
+    border-radius: 6px;
+    outline: none;
+    font-family: 'Open Sans';
+    font-size: 14px;
+    line-height: 24px;
+    color: white;
+    cursor: pointer;
 }
 
