@@ -1,4 +1,4 @@
-import { isValid } from './model';
+import { isValid } from './email.model';
 import { copy } from './text';
 
 import './style.css';
@@ -11,7 +11,7 @@ export const actionClass = {
     countButton: 'EmailEditor-Button--GetCount',
 };
 
-export const EmailEditor = `
+export const EmailEditor = () => `
     <div class="EmailEditor">
         <div class="EmailEditor-Content">
             <div class="EmailEditor-Title">
@@ -31,7 +31,7 @@ export const EmailEditor = `
     </div>
 `;
 
-export const RemoveIcon = `
+export const RemoveIcon = () => `
     <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M8 0.8L7.2 0L4 3.2L0.8 0L0 0.8L3.2 4L0 7.2L0.8 8L4 4.8L7.2 8L8 7.2L4.8 4L8 0.8Z" fill="#050038"/>
     </svg>
@@ -39,11 +39,11 @@ export const RemoveIcon = `
 
 export const RemoveButton = () => `
     <button class="${actionClass.itemRemoveButton}">
-        ${RemoveIcon}
+        ${RemoveIcon()}
     </button>
 `;
 
-export function getItem(id) {
+export const EmailItem = (id) => {
     if (!isValid(id)) {
         return `
             <span class="EmailEditor-Item" data-key="${id}">
@@ -58,4 +58,4 @@ export function getItem(id) {
             ${RemoveButton(id)}
         </span>
     `;
-}
+};

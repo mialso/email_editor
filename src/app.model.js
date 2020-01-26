@@ -1,13 +1,11 @@
-import { initialState } from './model';
-import {
-    handleRender, handleEmailsGet, handleEmailsSet,
-} from './controller';
+import { handleRender } from './render';
+import { handleEmailsGet, handleEmailsSet } from './controller';
 
 export function cloneState(state) {
     return JSON.parse(JSON.stringify(state));
 }
 
-export function createEmailEditor(parentElement) {
+export function createStore(parentElement, initialState) {
     // observable stuff
     const listeners = [];
 
@@ -41,14 +39,17 @@ export function createEmailEditor(parentElement) {
     };
 
     // initialize renderer
-    const maybeRender = handleRender(parentElement, { getState });
+    const render = handleRender(parentElement, { getState });
 
-    return [
-        { maybeRender, setState, getState },
-        Object.freeze({
-            subscribe,
-            getEmails: handleEmailsGet({ getState }),
-            setEmails: handleEmailsSet({ maybeRender, setState }, { getState }),
-        }),
-    ];
+    return Object.freeze({
+        render, setState, getState, subscribe,
+    });
+}
+
+export function createEmailEditor(store) {
+    return {
+        subscribe: store.subscribe,
+        getEmails: handleEmailsGet(store),
+        setEmails: handleEmailsSet(store),
+    };
 }

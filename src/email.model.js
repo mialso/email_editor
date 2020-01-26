@@ -75,10 +75,15 @@ export const addEmailsFromArray = (emailsArray) => (state) => {
     return compose(...emailsArray.map(addEmail))(state);
 };
 
+export const updateInput = (value) => (state) => ({
+    ...state,
+    inputValue: value,
+});
+
 export const emailReducer = (getState) => (message) => {
     const state = getState();
     switch (message.type) {
-        case UPDATE_INPUT: return { ...state, inputValue: message.payload };
+        case UPDATE_INPUT: return updateInput(message.payload)(state);
         case CREATE_EMAIL: return addEmail(message.payload)(state);
         case CREATE_EMAILS_FROM_ARRAY: return addEmailsFromArray(message.payload)(state);
         case DELETE_EMAIL: return removeEmail(message.payload)(state);

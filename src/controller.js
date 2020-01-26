@@ -1,117 +1,44 @@
-import { getItem } from './view';
-import { emailReducer, validEmailsList } from './model';
+import { emailReducer, validEmailsList } from './email.model';
 import {
-    CREATE_EMAIL, CREATE_EMAILS_FROM_ARRAY, DELETE_EMAIL, UPDATE_INPUT,
+    createEmail, createEmailsFromArray, deleteEmail, updateInput,
 } from './action';
 import { compose, getRandomString, findParentDataKey } from './util';
 
-export const handleRender = (parentElement, { getState }) => {
-    const updateInput = (shouldUpdate) => {
-        if (!shouldUpdate) {
-            return false;
-        }
-        const { inputValue } = getState();
-        const emailInput = parentElement.querySelector('.EmailEditor-Input');
-        if (!emailInput) {
-            console.error(`Unable to find either emailInput:[${!!(emailInput)}] dom element`);
-            return false;
-        }
-        emailInput.value = inputValue;
-        emailInput.scrollIntoView();
-        return true;
-    };
-
-    const removeEmailItem = (shouldUpdate) => {
-        if (!shouldUpdate) {
-            return false;
-        }
-        const { emailIds } = getState();
-        // TODO
-        const emailEditorContainer = parentElement.querySelector('.EmailEditor-Editor');
-        if (!emailEditorContainer) {
-            console.error(`Unable to find either emailEditor:[${!!(emailEditorContainer)}] dom element`);
-            return false;
-        }
-        const renderedEmailItems = emailEditorContainer.childNodes;
-        const itemsToRemove = [];
-        renderedEmailItems.forEach((item) => {
-            const emailKey = item.dataset && item.dataset.key;
-            if (emailKey && !emailIds.includes(emailKey)) {
-                itemsToRemove.push(item);
-            }
-        });
-        itemsToRemove.forEach((item) => emailEditorContainer.removeChild(item));
-        return true;
-    };
-
-    const addEmailItem = (shouldUpdate) => {
-        if (!shouldUpdate) {
-            return false;
-        }
-        const { emailIds } = getState();
-        // TODO
-        const emailEditorContainer = parentElement.querySelector('.EmailEditor-Editor');
-        const emailInput = parentElement.querySelector('.EmailEditor-Input');
-        if (!emailEditorContainer) {
-            console.error(`Unable to find either emailEditor:[${!!(emailEditorContainer)}] dom element`);
-            return false;
-        }
-        // TODO: this is (better?) possible with prev state data
-        const renderedEmailItems = Array.from(emailEditorContainer.childNodes)
-            .map((node) => node.dataset && node.dataset.key)
-            .filter((key) => !!key);
-        const itemsToAdd = emailIds.filter((emailId) => !renderedEmailItems.includes(emailId));
-        if (!itemsToAdd.length) {
-            return true;
-        }
-        const newItems = document.createRange().createContextualFragment(itemsToAdd.map(getItem).join(''));
-        while (newItems.children.length) {
-            emailEditorContainer.insertBefore(newItems.children.item(0), emailInput);
-        }
-        return true;
-    };
-    return {
-        updateInput,
-        removeEmailItem,
-        addEmailItem,
-    };
-};
-
-export const handleInputEmail = ({ maybeRender: { updateInput, addEmailItem }, setState }, { getState }) => compose(
-    updateInput,
-    addEmailItem,
+export const handleInputEmail = ({ render, setState, getState }) => compose(
+    render.updateInput,
+    render.addEmailItem,
     setState,
     emailReducer(getState),
     (event) => {
         const { value } = event.target;
         if (value.endsWith(',') || value.endsWith(' ')) {
-            return { type: CREATE_EMAIL, payload: event.target.value.slice(0, -1) };
+            return createEmail(event.target.value.slice(0, -1));
         }
-        return { type: UPDATE_INPUT, payload: value };
+        return updateInput(value);
     },
 );
 
-export const handleChangeEmail = ({ maybeRender: { updateInput, addEmailItem }, setState }, { getState }) => compose(
-    updateInput,
-    addEmailItem,
+export const handleChangeEmail = ({ render, setState, getState }) => compose(
+    render.updateInput,
+    render.addEmailItem,
     setState,
     emailReducer(getState),
-    (event) => ({ type: CREATE_EMAIL, payload: event.target.value }),
+    (event) => createEmail(event.target.value),
 );
 
-export const handleItemDelete = ({ maybeRender: { removeEmailItem }, setState }, { getState }) => compose(
-    removeEmailItem,
+export const handleItemDelete = ({ render, setState, getState }) => compose(
+    render.removeEmailItem,
     setState,
     emailReducer(getState),
-    (event) => ({ type: DELETE_EMAIL, payload: findParentDataKey(event, 'key') }),
+    (event) => deleteEmail(findParentDataKey(event, 'key')),
 );
 
-export const handleAddClick = ({ maybeRender: { addEmailItem, updateInput }, setState }, { getState }) => compose(
-    updateInput,
-    addEmailItem,
+export const handleAddClick = ({ render, setState, getState }) => compose(
+    render.updateInput,
+    render.addEmailItem,
     setState,
     emailReducer(getState),
-    () => ({ type: CREATE_EMAIL, payload: `${getRandomString()}@email` }),
+    () => createEmail(`${getRandomString()}@email`),
 );
 
 export const handleCountClick = ({ getState }) => () => {
@@ -120,21 +47,21 @@ export const handleCountClick = ({ getState }) => () => {
 
 export const handleEmailsGet = ({ getState }) => () => validEmailsList(getState());
 
-export const handleEmailsSet = ({ maybeRender: { removeEmailItem, addEmailItem }, setState }, { getState }) => compose(
-    addEmailItem,
-    removeEmailItem,
+export const handleEmailsSet = ({ render, setState, getState }) => compose(
+    render.addEmailItem,
+    render.removeEmailItem,
     setState,
     emailReducer(getState),
-    (emailsArray) => ({ type: CREATE_EMAILS_FROM_ARRAY, payload: emailsArray }),
+    createEmailsFromArray,
 );
 
-export const handleEmailsPaste = ({ maybeRender: { addEmailItem }, setState }, { getState }) => compose(
-    addEmailItem,
+export const handleEmailsPaste = ({ render, setState, getState }) => compose(
+    render.addEmailItem,
     setState,
     emailReducer(getState),
     (event) => {
         const emailsText = event.clipboardData.getData('text');
         event.preventDefault();
-        return { type: CREATE_EMAILS_FROM_ARRAY, payload: emailsText.split(',') };
+        return createEmailsFromArray(emailsText.split(','));
     },
 );
