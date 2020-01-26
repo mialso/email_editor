@@ -1,12 +1,14 @@
 #### email editor
 
-> please visit a [codepen.io](https://codepen.io/mialso/project/full/XJNYbN) for a working example
+> please visit a [codepen.io](https://codepen.io/mialso/project/full/XJNYbN) for a working examples
 
 #### usage
 > `./dist/` folder has both **emailEditor.css**  **emailEditor.js** bundles
 
+##### js
+
 ```
-const { addEmailEditor } = window.EmailEditor;
+const { addEmailEditor } = EmailEditor;
 const emailEditorContainer = document.getElementById('#email_editor');
 const { subscribe, getEmails, setEmails } = addEmailEditor(emailEditorContainer);
 
@@ -17,6 +19,10 @@ const unsubscribeDebug = subscribe((state) => whatHappensIn(state)));
 const unsubscribeEmails = subscribe(() => handleEmailList(getEmails()));
 ```
 
+##### css
+**EmailEditor** fits parent `width` and `height`, please see **codepen** examples given above
+
+
 ##### npm repo commands
 * `npm run start` - start the dev server to have the bundle and css served at **localhost:4004**
 * `npm run build:dev` - get default webpack 'development' mode build output to `./dist` folder
@@ -24,6 +30,10 @@ const unsubscribeEmails = subscribe(() => handleEmailList(getEmails()));
 * `npm run lint` - get linter result console output
 
 #### description
+
+##### functional overview
+![functional_overview](docs/functional_requirements_overview.png)
+> for more details please visit [miro board](https://miro.com/app/board/o9J_kv8fLYY=/)
 
 ##### dependency graph
 ![dependency_graph](docs/dependency_graph.svg)
