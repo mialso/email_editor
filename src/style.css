@@ -65,6 +65,13 @@
     padding-right: 24px;
     margin-right: 4px;
     margin-bottom: 3px;
+    overflow: hidden;
+}
+
+.EmailEditor-TextWrap {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .EmailEditor-Item--valid {

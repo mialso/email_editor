@@ -15,9 +15,9 @@ export function getRandomString() {
 export function findParentDataKey(event, key) {
     let value = null;
     let loopEl = event.target;
-    do {
+    while (!value && event.currentTarget !== loopEl) {
         value = loopEl.dataset[key];
         loopEl = loopEl.parentNode;
-    } while (!value && event.currentTarget !== loopEl);
+    }
     return value;
 }

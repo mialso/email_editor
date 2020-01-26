@@ -8,5 +8,6 @@ module.exports = {
         "array-bracket-spacing": ["error", "always"],
         "import/prefer-default-export": 0,
         "import/no-unresolved": "off",
+        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     },
 };

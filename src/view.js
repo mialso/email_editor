@@ -5,7 +5,7 @@ import './style.css';
 
 export const actionClass = {
     inputElement: 'EmailEditor-Input',
-    itemList: 'EmailEditor-List',
+    itemList: 'EmailEditor-Editor',
     itemRemoveButton: 'EmailEditor-ItemRemove',
     addButton: 'EmailEditor-Button--AddEmail',
     countButton: 'EmailEditor-Button--GetCount',
@@ -17,8 +17,7 @@ export const EmailEditor = `
             <div class="EmailEditor-Title">
                 ${copy().title().start}<b>${copy().title().name}</b>${copy().title().end}
             </div>
-            <div class="EmailEditor-Editor">
-                <div class="${actionClass.itemList}"></div>
+            <div class="${actionClass.itemList}">
                 <input class="${actionClass.inputElement}" type="text" placeholder="${copy().inputPlaceholder()}"></input>
             </div>
         </div>
@@ -35,8 +34,8 @@ export const RemoveIcon = `
     </svg>
 `;
 
-export const RemoveButton = (id) => `
-    <button class="${actionClass.itemRemoveButton}" data-key="${id}">
+export const RemoveButton = () => `
+    <button class="${actionClass.itemRemoveButton}">
         ${RemoveIcon}
     </button>
 `;
@@ -44,15 +43,15 @@ export const RemoveButton = (id) => `
 export function getItem(id) {
     if (!isValid(id)) {
         return `
-            <span class="EmailEditor-Item">
-                <span class="EmailEditor-Item--invalid">${id}</span>
+            <span class="EmailEditor-Item" data-key="${id}">
+                <span class="EmailEditor-Item--invalid EmailEditor-TextWrap">${id}</span>
                 ${RemoveButton(id)}
             </span>
         `;
     }
     return `
-        <span class="EmailEditor-Item EmailEditor-Item--valid">
-            <span>${id}</span>
+        <span class="EmailEditor-Item EmailEditor-Item--valid" data-key="${id}">
+            <span class="EmailEditor-TextWrap">${id}</span>
             ${RemoveButton(id)}
         </span>
     `;
